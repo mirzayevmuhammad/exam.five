@@ -1,24 +1,33 @@
 import {
   CanActivate,
   ExecutionContext,
-  ForbiddenException,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
-class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const req = context.switchToHttp().getRequest();
-    console.log(context.getHandler());
-    const token = req.cookie['jwt'];
+export class JwtAuthGuard implements CanActivate {
+  constructor(private readonly jwtService: JwtService) {}
+
+  canActivate(context: ExecutionContext): boolean {
+    const request = context.switchToHttp().getRequest();
+    const token = request.cookies['token'];
+
+    if (!token) throw new UnauthorizedException('Token topilmadi');
+
     try {
-      const { userId, userRole } = await this.jwtService.verifyAsync(token);
-      req.user = { userId, userRole };
+      const decoded = this.jwtService.verify(token);
+
+      request.user = {
+        id: decoded.userId,
+        role: decoded.role,
+        email: decoded.email,
+      };
+
       return true;
-    } catch (error) {
-      throw new ForbiddenException('token is isvalid');
+    } catch (err) {
+      throw new UnauthorizedException("Token noto'g'ri yoki muddati o'tgan");
     }
   }
 }

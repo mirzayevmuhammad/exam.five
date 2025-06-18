@@ -1,20 +1,37 @@
-import { IsString, IsEmail, MinLength } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsPhoneNumber,
+  IsEmail,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateAuthDto {
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
   @IsString()
   username: string;
 
-  @IsEmail()
+  @IsNotEmpty()
   @IsString()
-  email: string;
+  firstName: string;
 
+  @IsNotEmpty()
   @IsString()
-  @MinLength(6)
+  lastName: string;
+
+  @IsNotEmpty()
+  @IsPhoneNumber()
+  phone_number: string;
+
+  @IsNotEmpty()
+  @IsString()
   password: string;
 
+  @IsOptional()
   @IsString()
-  session_token: string;
-
-  @IsString()
-  phone_number: string;
+  session_token?: string;
 }

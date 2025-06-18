@@ -6,9 +6,7 @@ import { DatabaseModule } from './core/database/database.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { TransformInterceptor } from './common/intercepters/transformer.interceptor';
-import { VideoModule } from './module/video/video.module';
-import { VideoModule } from './modules/video/video.module';
+import { TransformInterceptor } from './common/interceptors/transform.intercptors';
 
 @Module({
   imports: [
@@ -21,13 +19,12 @@ import { VideoModule } from './modules/video/video.module';
     AuthModule,
     UsersModule,
     DatabaseModule,
-    VideoModule,
   ],
-  providers: [
-    {
+  providers:[
+      {
       provide: APP_INTERCEPTOR,
       useClass: TransformInterceptor,
     },
-  ],
+  ]
 })
 export class AppModule {}
