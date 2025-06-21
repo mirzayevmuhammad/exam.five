@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import RedisService from 'src/core/database/redis.service';
+import { RedisService } from 'src/core/database/redis.service';
 
 @Injectable()
 class OtpSecurityService {
@@ -41,7 +41,7 @@ class OtpSecurityService {
     const key = `temporary_blocked_user:${phone_number}`;
     const data = await this.redisService.getKey(key);
     if (data) {
-      const ttlKey = await this.redisService.getTTLKey(key);
+      const ttlKey = await this.redisService.getTtlKey(key);
       throw new BadRequestException({
         message: `You tried too much,please try again after ${Math.floor(ttlKey / 60)} minutes`,
       });

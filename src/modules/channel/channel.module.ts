@@ -1,7 +1,6 @@
 import { Module, UnsupportedMediaTypeException } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
-import { AuthModule } from '../auth/auth.module';
+import { ChannelService } from './channel.service';
+import { ChannelController } from './channel.controller';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import path from 'path';
@@ -9,16 +8,15 @@ import { v4 as uuid } from 'uuid';
 
 @Module({
   imports: [
-    AuthModule,
     MulterModule.register({
-      dest: './uploads/avatars',
+      dest: './uploads/banners',
       storage: diskStorage({
         filename: (req, file, callback) => {
           const extName = path.extname(file.originalname);
           const fileName = `${uuid()}${extName}`;
           callback(null, fileName);
         },
-        destination: './uploads/avatars',
+        destination: './uploads/banners',
       }),
       fileFilter: (req, file, callback) => {
         const allowed = ['image/jpeg', 'image/jpg', 'image/png'];
@@ -34,7 +32,7 @@ import { v4 as uuid } from 'uuid';
       },
     }),
   ],
-  controllers: [UsersController],
-  providers: [UsersService],
+  controllers: [ChannelController],
+  providers: [ChannelService],
 })
-export class UsersModule {}
+export class ChannelModule {}

@@ -30,7 +30,6 @@ model User {
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
 
-  // Relations
   videos        Video[]
   comments      Comment[]
   likes         Like[]
@@ -40,17 +39,6 @@ model User {
 
   @@map("user")
 }
-
-// KEYINROQ QO'SHISH MUMKIN BO'LGAN QISMLAR:
-// - channelBanner String?
-// - channelDescription String?
-// - isBlocked Boolean @default(false)
-// - blockedUntil DateTime?
-// - loginAttempts Int @default(0)
-// - subscribersCount Int @default(0)
-// - totalViews BigInt @default(0)
-// - watchHistory WatchHistory[]
-// - notifications Notification[]
 
 model Video {
   id             String          @id @default(uuid())
@@ -68,7 +56,6 @@ model Video {
   dislikesCount  Int             @default(0)
   createdAt      DateTime        @default(now())
 
-  // Relations
   authorId String
   author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   comments Comment[]
@@ -77,15 +64,6 @@ model Video {
   @@map("video")
 }
 
-// KEYINROQ QO'SHISH MUMKIN:
-// - fileSize BigInt
-// - resolution String // 1080p, 720p, etc.
-// - category String?
-// - tags String[]
-// - commentsCount Int @default(0)
-// - publishedAt DateTime?
-// - watchHistory WatchHistory[]
-// - playlistVideos PlaylistVideo[]
 
 model Comment {
   id         String   @id @default(uuid())
@@ -93,7 +71,6 @@ model Comment {
   likesCount Int      @default(0)
   createdAt  DateTime @default(now())
 
-  // Relations
   authorId      String
   author        User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   videoId       String
@@ -130,7 +107,6 @@ model Playlist {
   visibility  Visibility @default(PUBLIC)
   createdAt   DateTime   @default(now())
 
-  // Relations
   authorId String
   author   User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
   videos   PlaylistVideo[]
